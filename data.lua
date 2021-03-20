@@ -7,9 +7,14 @@ entity.name = "selective-breeder"
 entity.crafting_categories = {crafting_category.name}
 entity.result_inventory_size = 2
 entity.animation.tint = SELECTIVE_BREEDER_TINT
+entity.icons = {{icon = entity.icon; tint = SELECTIVE_BREEDER_TINT}}
 for _, working_visualisation in pairs(entity.working_visualisations) do
   working_visualisation.animation.tint = SELECTIVE_BREEDER_TINT
 end
+entity.minable.results = nil
+entity.minable.result = "selective-breeder"
+entity.next_upgrade = "iron-forestry"
+entity.placeable_by = {item = "selective-breeder"; count = 1}
 
 DIR.add_new_machine("selective-breeder", {
   ingredients = {{"iron-plate"; 24}; {"iron-stick"; 32}; {"glass"; 16}; {"wood-chips"; 16}; {"small-lamp"; 4}};
@@ -21,6 +26,10 @@ DIR.add_new_machine("selective-breeder", {
 
 local selective_breeder_item = data.raw["item"]["selective-breeder"]
 selective_breeder_item.icons = {{icon = selective_breeder_item.icon; tint = SELECTIVE_BREEDER_TINT}}
+
+local selective_breeder_recipe = data.raw["recipe"]["selective-breeder"]
+selective_breeder_recipe.icons = selective_breeder_item.icons;
+selective_breeder_recipe.icon_size = selective_breeder_item.icon_size;
 
 local recipe = {
   name = "rubber-tree-selection";
