@@ -1,53 +1,62 @@
 local SELECTIVE_BREEDER_TINT = {1; 0.7; 0.7}
 
-local crafting_category = {type = "recipe-category"; name = "selection"}
+local iron_forestry_item = data.raw["item"]["iron-forestry"]
+local iron_forestry_entity = data.raw["furnace"]["iron-forestry"]
+local iron_forestry_recipe = data.raw["recipe"]["iron-forestry"]
+local rubber_growth_recipe = data.raw["recipe"]["rubber-growth"]
+local wood_growth_recipe = data.raw["recipe"]["wood-growth"]
 
-local entity = table.deepcopy(data.raw["furnace"]["iron-forestry"])
-entity.name = "selective-breeder"
-entity.crafting_categories = {crafting_category.name}
-entity.result_inventory_size = 2
-entity.animation.tint = SELECTIVE_BREEDER_TINT
-entity.icons = {{icon = entity.icon; tint = SELECTIVE_BREEDER_TINT}}
-for _, working_visualisation in pairs(entity.working_visualisations) do
+local crafting_category = {type = "recipe-category"; name = "selection"}
+data:extend({crafting_category})
+
+local selective_breeder_item = table.deepcopy(iron_forestry_item)
+for k, v in pairs({
+  name = "selective-breeder";
+  order = iron_forestry_item.order .. "-1";
+  icons = {{icon = selective_breeder_item.icon; tint = SELECTIVE_BREEDER_TINT}};
+  place_result = nil;
+}) do selective_breeder_item[k] = v end
+data:extend({selective_breeder_item})
+
+local selective_breeder_entity = table.deepcopy(iron_forestry_entity)
+for k, v in pairs({
+  name = "selective-breeder";
+  crafting_categories = {crafting_category.name};
+  result_inventory_size = 2;
+  icons = {{icon = selective_breeder_entity.icon; tint = SELECTIVE_BREEDER_TINT}};
+  next_upgrade = iron_forestry_entity.name;
+  placeable_by = {item = selective_breeder_item.name; count = 1};
+}) do selective_breeder_entity[k] = v end
+selective_breeder_entity.animation.tint = SELECTIVE_BREEDER_TINT
+for _, working_visualisation in pairs(selective_breeder_entity.working_visualisations) do
   working_visualisation.animation.tint = SELECTIVE_BREEDER_TINT
 end
-entity.minable.results = nil
-entity.minable.result = "selective-breeder"
-entity.next_upgrade = "iron-forestry"
-entity.placeable_by = {item = "selective-breeder"; count = 1}
+data:extend({selective_breeder_entity})
 
-DIR.add_new_machine("selective-breeder", {
-  ingredients = {{"iron-plate"; 24}; {"iron-stick"; 32}; {"glass"; 16}; {"wood-chips"; 16}; {"small-lamp"; 4}};
-  enabled = false;
-  subgroup = "ir2-machines-resources";
-  time = 6;
-  icon = "iron-forestry";
-})
+selective_breeder_item.place_result = selective_breeder_entity.name
 
-local selective_breeder_item = data.raw["item"]["selective-breeder"]
-selective_breeder_item.icons = {{icon = selective_breeder_item.icon; tint = SELECTIVE_BREEDER_TINT}}
-
-local selective_breeder_recipe = data.raw["recipe"]["selective-breeder"]
-selective_breeder_recipe.icons = selective_breeder_item.icons;
-selective_breeder_recipe.icon_size = selective_breeder_item.icon_size;
-
-local recipe = {
-  name = "rubber-tree-selection";
+local selective_breeder_recipe = {
   type = "recipe";
-  category = crafting_category.name;
-  subgroup = "wood";
-  order = "zb";
-  always_show_made_in = true;
-  allow_decomposition = false;
-  show_amount_in_title = false;
-  always_show_products = true;
+  name = "selective-breeder";
+  order = iron_forestry_recipe.order .. "-1";
+  subgroup = "ir2-machines-resources";
+  result = selective_breeder_item.name;
+  category = "crafting";
   enabled = false;
-  ingredients = {{type = "item"; name = "wood"; amount = 1}};
+  ingredients = {{name = iron_forestry_item.name; amount = 1}};
+  energy_required = 2 * DIR.standard_crafting_time;
+}
+data:extend({selective_breeder_recipe})
+
+local rubber_tree_selection_recipe = table.deepcopy(wood_growth_recipe)
+for k, v in pairs({
+  name = "rubber-tree-selection";
+  category = crafting_category.name;
+  order = rubber_growth_recipe.order .. "-1";
   results = {
     {type = "item"; name = "wood"; amount_min = 1; amount_max = 2};
     {type = "item"; name = "rubber-wood"; amount = 1; probability = 0.01};
   };
-  energy_required = DIR.forestry_cycle;
   icons = {
     {
       icon = DIR.get_icon_path("forestry-background");
@@ -57,9 +66,10 @@ local recipe = {
     };
     {icon = DIR.get_icon_path("rubber-wood"); icon_size = DIR.icon_size; icon_mipmaps = DIR.icon_mipmaps; scale = 0.45};
   };
-}
+}) do rubber_tree_selection_recipe[k] = v end
+data:extend({rubber_tree_selection_recipe})
 
-local technology = {
+local rubber_tree_selection_tech = {
   name = "rubber-tree-selection-tech";
   type = "technology";
   prerequisites = {"ir2-iron-forestry"};
@@ -86,5 +96,4 @@ local technology = {
   };
   icon_size = DIR.icon_size;
 }
-
-data:extend({crafting_category; entity; recipe; technology})
+data:extend({rubber_tree_selection_tech})
