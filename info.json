@@ -1,12 +1,12 @@
 {
   "name": "IR2_RubberTreeSelectiveBreeding",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "title": "Industrial Revolution 2 Rubber Tree Selective Breeding",
   "author": "NickLatkovich",
   "factorio_version": "1.1",
   "dependencies": [
     "base >= 1.1.26",
-    "IndustrialRevolution >= 2.0.2"
+    "IndustrialRevolution >= 2.3.2"
   ],
   "description": "Adds a recipe to Industrial Revolution 2 that allows you to get rubber wood without hours of exploring the map in search of it."
 }

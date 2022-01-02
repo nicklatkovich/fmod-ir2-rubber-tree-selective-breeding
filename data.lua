@@ -59,7 +59,7 @@ for k, v in pairs({
   };
   icons = {
     {
-      icon = DIR.get_icon_path("forestry-background");
+      icon = DIR.get_icon_path("forestry-overlay");
       icon_size = DIR.icon_size;
       icon_mipmaps = DIR.icon_mipmaps;
       tint = {1; 0; 0};
